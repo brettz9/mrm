@@ -22,8 +22,6 @@ const MrmError = require('./error');
  * @typedef RunOptions
  * @property {boolean} [dev]
  * @property {boolean} [remove]
- * @property {boolean} [stdio]
- * @property {string} [cwd]
  */
 
 /**
@@ -120,8 +118,8 @@ function runNpm(deps, options, exec) {
 	].concat(deps);
 
 	return execCommand(exec, 'npm', args, {
-		stdio: options.stdio === undefined ? 'inherit' : options.stdio,
-		cwd: options.cwd,
+		stdio: 'inherit',
+		cwd: undefined,
 	});
 }
 
@@ -146,8 +144,8 @@ function runYarn(deps, options, exec) {
 	const args = (options.remove ? remove : add).concat(deps);
 
 	return execCommand(exec, 'yarn', args, {
-		stdio: options.stdio === undefined ? 'inherit' : options.stdio,
-		cwd: options.cwd,
+		stdio: 'inherit',
+		cwd: undefined,
 	});
 }
 

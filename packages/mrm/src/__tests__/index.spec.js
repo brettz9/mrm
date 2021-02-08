@@ -353,6 +353,80 @@ describe('getTaskOptions', () => {
 		});
 	});
 
+	describe('interactive mode with force', () => {
+		it('should prompt values', async () => {
+			configureInquirer({
+				'first-config': 'first value',
+				'second-config': 'second value',
+				// 'third-config': keep default
+			});
+
+			const answers = await getTaskOptions(
+				task6,
+				{ interactive: true, force: true },
+				{
+					'second-config': 'second value',
+				}
+			);
+
+			expect(answers).toEqual({
+				'first-config': 'first value',
+				'second-config': 'second value',
+				'third-config': 'eulav dnoces',
+			});
+		});
+
+		it('should respect parameters default values', async () => {
+			configureInquirer({});
+
+			const answers = await getTaskOptions(task6, {
+				interactive: true,
+				force: true,
+			});
+
+			expect(answers).toEqual({
+				'first-config': '',
+				'second-config': 'default value',
+				'third-config': '',
+			});
+		});
+
+		it('should be possible to override parameters default values', async () => {
+			configureInquirer({});
+
+			const answers = await getTaskOptions(
+				task6,
+				{ interactive: true, force: true },
+				{
+					'first-config': 'initial',
+				}
+			);
+
+			expect(answers).toEqual({
+				'first-config': 'initial',
+				'second-config': 'default value',
+				'third-config': '',
+			});
+		});
+
+		it('should use default values for static options and do not propmpt them', async () => {
+			configureInquirer({
+				'interactive-config': 'pizza',
+				'static-config': 'second value', // this value shouldn't be used
+			});
+
+			const answers = await getTaskOptions(task8, {
+				interactive: true,
+				force: true,
+			});
+
+			expect(answers).toEqual({
+				'interactive-config': 'pizza',
+				'static-config': 'default value',
+			});
+		});
+	});
+
 	describe('non-interactive mode', () => {
 		it('should use default values for static options', async () => {
 			const answers = await getTaskOptions(task6, { interactive: false });

@@ -58,7 +58,12 @@ process.on('unhandledRejection', err => {
 });
 
 async function main() {
-	const argv = minimist(process.argv.slice(2), { alias: { i: 'interactive' } });
+	const argv = minimist(process.argv.slice(2), {
+		alias: {
+			i: 'interactive',
+			y: 'force',
+		},
+	});
 	const tasks = argv._;
 
 	const binaryPath = process.env._;

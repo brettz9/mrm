@@ -30,10 +30,14 @@ it('should add a readme', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			name: 'Gandalf',
-			url: 'https://middleearth.com',
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				name: 'Gandalf',
+				url: 'https://middleearth.com',
+			}
+		)
 	);
 
 	expect(

@@ -165,7 +165,7 @@ function runTask(taskName, directories, options, argv) {
 
 		console.log(kleur.cyan(`Running ${taskName}...`));
 
-		Promise.resolve(getTaskOptions(module, argv.interactive, options))
+		Promise.resolve(getTaskOptions(module, argv, options))
 			.then(getConfigGetter)
 			.then(config => module(config, argv))
 			.then(resolve)
@@ -178,10 +178,16 @@ function runTask(taskName, directories, options, argv) {
  * or using defaults.
  *
  * @param {Function} task
- * @param {boolean} interactive? Whether or not interactive mode is enabled.
+ * @param {Object} cfg?
+ * @param {boolean} cfg.force? Whether or not force mode is enabled.
+ * @param {boolean} cfg.interactive? Whether or not interactive mode is enabled.
  * @param {Record<string, any>} options? Default available options passed into the task.
  */
-async function getTaskOptions(task, interactive = false, options = {}) {
+async function getTaskOptions(
+	task,
+	{ force = false, interactive = false } = {},
+	options = {}
+) {
 	// If no parameters set, resolve to default options (from config file or command line).
 	if (!task.parameters) {
 		return options;
@@ -206,7 +212,10 @@ async function getTaskOptions(task, interactive = false, options = {}) {
 	// Split interactive and static options
 	const [prompts, statics] = partition(
 		allOptions,
-		option => interactive && option.type !== 'config'
+		option =>
+			interactive &&
+			option.type !== 'config' &&
+			(!force || !('default' in option))
 	);
 
 	// Validate static options

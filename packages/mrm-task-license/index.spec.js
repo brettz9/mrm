@@ -37,7 +37,7 @@ test('adds a license file with author details', async () => {
 			.toString(),
 	});
 
-	task(await getTaskOptions(task, false, config));
+	task(await getTaskOptions(task, { interactive: false }, config));
 
 	expect(vol.toJSON()['/License.md']).toMatch(/The MIT License/);
 	expect(vol.toJSON()['/License.md']).toMatch(
@@ -76,7 +76,7 @@ test('reads license name from package.json', async () => {
 		}),
 	});
 
-	task(await getTaskOptions(task, false, config));
+	task(await getTaskOptions(task, { interactive: false }, config));
 
 	expect(vol.toJSON()['/License.md']).toMatch(
 		'Apache License, Version 2.0 (Apache-2.0)'
@@ -85,11 +85,15 @@ test('reads license name from package.json', async () => {
 
 test('skips when template not found', async () => {
 	task(
-		await getTaskOptions(task, false, {
-			name: 'Gendalf',
-			email: 'gendalf@middleearth.com',
-			url: 'https://middleearth.com',
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				name: 'Gendalf',
+				email: 'gendalf@middleearth.com',
+				url: 'https://middleearth.com',
+			}
+		)
 	);
 
 	expect(console.log).toBeCalledWith(expect.stringMatching('skipping'));
@@ -103,9 +107,13 @@ test('uses the license config argument', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			license: 'Unlicense',
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				license: 'Unlicense',
+			}
+		)
 	);
 
 	expect(vol.readFileSync('/License.md', 'utf8')).toMatch(
@@ -120,7 +128,7 @@ test('adds license to package.json if not set', async () => {
 			.toString(),
 	});
 
-	task(await getTaskOptions(task, false, config));
+	task(await getTaskOptions(task, { interactive: false }, config));
 
 	expect(json('/package.json').get('license')).toBe('MIT');
 });

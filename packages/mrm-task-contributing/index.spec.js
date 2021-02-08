@@ -26,9 +26,13 @@ it('should add a Contributing.md file', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			github: 'gendalf',
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				github: 'gendalf',
+			}
+		)
 	);
 
 	expect(

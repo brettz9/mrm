@@ -293,9 +293,13 @@ describe('getTaskOptions', () => {
 				// 'third-config': keep default
 			});
 
-			const answers = await getTaskOptions(task6, true, {
-				'second-config': 'second value',
-			});
+			const answers = await getTaskOptions(
+				task6,
+				{ interactive: true },
+				{
+					'second-config': 'second value',
+				}
+			);
 
 			expect(answers).toEqual({
 				'first-config': 'first value',
@@ -307,7 +311,7 @@ describe('getTaskOptions', () => {
 		it('should respect parameters default values', async () => {
 			configureInquirer({});
 
-			const answers = await getTaskOptions(task6, true);
+			const answers = await getTaskOptions(task6, { interactive: true });
 
 			expect(answers).toEqual({
 				'first-config': '',
@@ -319,9 +323,13 @@ describe('getTaskOptions', () => {
 		it('should be possible to override parameters default values', async () => {
 			configureInquirer({});
 
-			const answers = await getTaskOptions(task6, true, {
-				'first-config': 'initial',
-			});
+			const answers = await getTaskOptions(
+				task6,
+				{ interactive: true },
+				{
+					'first-config': 'initial',
+				}
+			);
 
 			expect(answers).toEqual({
 				'first-config': 'initial',
@@ -336,7 +344,7 @@ describe('getTaskOptions', () => {
 				'static-config': 'second value', // this value shouldn't be used
 			});
 
-			const answers = await getTaskOptions(task8, true);
+			const answers = await getTaskOptions(task8, { interactive: true });
 
 			expect(answers).toEqual({
 				'interactive-config': 'pizza',
@@ -347,7 +355,7 @@ describe('getTaskOptions', () => {
 
 	describe('non-interactive mode', () => {
 		it('should use default values for static options', async () => {
-			const answers = await getTaskOptions(task6, false);
+			const answers = await getTaskOptions(task6, { interactive: false });
 			expect(answers).toEqual({
 				'first-config': undefined,
 				'second-config': 'default value',
@@ -362,7 +370,7 @@ describe('getTaskOptions', () => {
 				'third-config': 'should not be used',
 			});
 
-			const answers = await getTaskOptions(task6, false);
+			const answers = await getTaskOptions(task6, { interactive: false });
 			expect(answers).toEqual({
 				'first-config': undefined,
 				'second-config': 'default value',
@@ -371,9 +379,13 @@ describe('getTaskOptions', () => {
 		});
 
 		it('should validate options: valid', async () => {
-			const answers = await getTaskOptions(task8, false, {
-				'interactive-config': 'pizza',
-			});
+			const answers = await getTaskOptions(
+				task8,
+				{ interactive: false },
+				{
+					'interactive-config': 'pizza',
+				}
+			);
 			expect(answers).toEqual({
 				'interactive-config': 'pizza',
 				'static-config': 'default value',
@@ -382,7 +394,7 @@ describe('getTaskOptions', () => {
 
 		it('should validate options: invalid', async () => {
 			try {
-				await getTaskOptions(task8, false);
+				await getTaskOptions(task8, { interactive: false });
 			} catch (err) {
 				expect(err.message).toBe(
 					'Missing required config options: interactive-config.'

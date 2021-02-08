@@ -61,7 +61,7 @@ it('should add latest Node version if engines field is not defined', async () =>
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, { maxNode: 14 }));
+	task(await getTaskOptions(task, { interactive: false }, { maxNode: 14 }));
 
 	expect(vol.toJSON()['/.travis.yml']).toMatchSnapshot();
 });

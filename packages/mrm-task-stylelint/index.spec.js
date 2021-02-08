@@ -30,7 +30,7 @@ it('should add stylelint', async () => {
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 	expect(install).toBeCalledWith(['stylelint', 'stylelint-config-standard']);
@@ -42,9 +42,13 @@ it('should install a custom preset', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			stylelintPreset: 'stylelint-config-pizza',
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				stylelintPreset: 'stylelint-config-pizza',
+			}
+		)
 	);
 
 	expect(vol.toJSON()['/.stylelintrc']).toMatchSnapshot();
@@ -57,10 +61,14 @@ it('should add custom rules', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			stylelintPreset: '',
-			stylelintRules: { 'max-empty-lines': 2 },
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				stylelintPreset: '',
+				stylelintRules: { 'max-empty-lines': 2 },
+			}
+		)
 	);
 
 	expect(vol.toJSON()['/.stylelintrc']).toMatchSnapshot();
@@ -71,7 +79,13 @@ it('should use custom extension', async () => {
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, { stylelintExtensions: '.sass' }));
+	task(
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ stylelintExtensions: '.sass' }
+		)
+	);
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
 });

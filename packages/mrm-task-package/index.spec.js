@@ -25,7 +25,7 @@ it('should add package.json', async () => {
 	vol.mkdirpSync(__dirname);
 	process.chdir(__dirname);
 
-	task(await getTaskOptions(task, false, options));
+	task(await getTaskOptions(task, { interactive: false }, options));
 
 	expect(vol.toJSON()[path.join(__dirname, 'package.json')]).toMatchSnapshot();
 });
@@ -34,7 +34,7 @@ it('should set custom Node.js version', async () => {
 	task(
 		await getTaskOptions(
 			task,
-			false,
+			{ interactive: false },
 			Object.assign({}, options, {
 				minNode: '9.1',
 			})
@@ -47,7 +47,7 @@ it('should set custom license', async () => {
 	task(
 		await getTaskOptions(
 			task,
-			false,
+			{ interactive: false },
 			Object.assign({}, options, {
 				license: 'BSD',
 			})

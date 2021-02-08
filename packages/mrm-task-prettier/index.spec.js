@@ -41,7 +41,7 @@ it('should use a custom indent', async () => {
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, { indent: 'tab' }));
+	task(await getTaskOptions(task, { interactive: false }, { indent: 'tab' }));
 
 	expect(vol.toJSON()['/.prettierrc']).toMatchSnapshot();
 });
@@ -52,7 +52,11 @@ it('should use a custom options', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, { prettierOptions: { printWidth: 333 } })
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ prettierOptions: { printWidth: 333 } }
+		)
 	);
 
 	expect(vol.toJSON()['/.prettierrc']).toMatchSnapshot();
@@ -64,7 +68,11 @@ it('should use a custom pattern', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, { prettierPattern: '**/*.{xxx,yyy}' })
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ prettierPattern: '**/*.{xxx,yyy}' }
+		)
 	);
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
@@ -76,16 +84,20 @@ it('should use custom overrides', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			prettierOverrides: [
-				{
-					files: '*.css',
-					options: {
-						printWidth: 42,
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				prettierOverrides: [
+					{
+						files: '*.css',
+						options: {
+							printWidth: 42,
+						},
 					},
-				},
-			],
-		})
+				],
+			}
+		)
 	);
 
 	expect(vol.toJSON()['/.prettierrc']).toMatchSnapshot();
@@ -114,16 +126,20 @@ it('should replace existing overrides for the same pattern', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			prettierOverrides: [
-				{
-					files: '*.md',
-					options: {
-						printWidth: 42,
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				prettierOverrides: [
+					{
+						files: '*.md',
+						options: {
+							printWidth: 42,
+						},
 					},
-				},
-			],
-		})
+				],
+			}
+		)
 	);
 
 	expect(vol.toJSON()['/.prettierrc']).toMatchSnapshot();

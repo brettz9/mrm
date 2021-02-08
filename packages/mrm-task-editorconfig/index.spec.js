@@ -20,7 +20,7 @@ it('should add EditorConfig', async () => {
 it('should add a single section when indent=2', async () => {
 	vol.fromJSON();
 
-	task(await getTaskOptions(task, false, { indent: 2 }));
+	task(await getTaskOptions(task, { interactive: false }, { indent: 2 }));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });

@@ -178,9 +178,13 @@ it('should use custom Prettier extensions', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			lintStagedRules: { prettier: { extensions: ['js', 'jsx', 'mjs'] } },
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				lintStagedRules: { prettier: { extensions: ['js', 'jsx', 'mjs'] } },
+			}
+		)
 	);
 
 	expect(vol.toJSON()).toMatchSnapshot();
@@ -197,9 +201,13 @@ it('should use a custom ESLint extension', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			lintStagedRules: { eslint: { extensions: ['js', 'jsx'] } },
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				lintStagedRules: { eslint: { extensions: ['js', 'jsx'] } },
+			}
+		)
 	);
 
 	expect(vol.toJSON()).toMatchSnapshot();
@@ -217,9 +225,13 @@ it('shouldn’t add a default rule if it’s disabled in overrides', async () =>
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			lintStagedRules: { eslint: { enabled: false } },
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				lintStagedRules: { eslint: { enabled: false } },
+			}
+		)
 	);
 
 	expect(vol.toJSON()).toMatchSnapshot();
@@ -252,9 +264,13 @@ it('should use a custom stylelint extension', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			lintStagedRules: { stylelint: { extensions: ['scss'] } },
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				lintStagedRules: { stylelint: { extensions: ['scss'] } },
+			}
+		)
 	);
 
 	expect(vol.toJSON()).toMatchSnapshot();
@@ -271,9 +287,13 @@ it('should add a custom rule', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			lintStagedRules: { false: { extensions: ['js'], command: 'false' } },
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				lintStagedRules: { false: { extensions: ['js'], command: 'false' } },
+			}
+		)
 	);
 
 	expect(vol.toJSON()).toMatchSnapshot();
@@ -294,7 +314,7 @@ it('should update an existing rule', async () => {
 		}),
 	});
 
-	task(await getTaskOptions(task, false));
+	task(await getTaskOptions(task, { interactive: false }));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 	expect(install).toBeCalledWith({ 'lint-staged': '>=10', husky: '>=4' });
@@ -316,12 +336,16 @@ it('should merge rules with the same pattern', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			lintStagedRules: {
-				eslint: { extensions: ['js'] },
-				prettier: { extensions: ['js'] },
-			},
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				lintStagedRules: {
+					eslint: { extensions: ['js'] },
+					prettier: { extensions: ['js'] },
+				},
+			}
+		)
 	);
 
 	expect(vol.toJSON()).toMatchSnapshot();

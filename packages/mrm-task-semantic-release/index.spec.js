@@ -40,7 +40,7 @@ it('should add semantic-release', async () => {
 		'/Readme.md': readmeMd,
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });
@@ -58,7 +58,7 @@ it('should remove custom config from package.json', async () => {
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
 });
@@ -76,7 +76,7 @@ after_success:
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()['/.travis.yml']).toMatchSnapshot();
 	expect(uninstall).toBeCalledWith(['semantic-release', 'travis-deploy-once']);

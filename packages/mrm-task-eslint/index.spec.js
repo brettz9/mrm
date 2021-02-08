@@ -35,7 +35,7 @@ it('should add ESLint', async () => {
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 	expect(install).toBeCalledWith(['eslint']);
@@ -58,16 +58,26 @@ it.each([
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, { eslintPreset: presetName }));
+	task(
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ eslintPreset: presetName }
+		)
+	);
 
 	expect(vol.toJSON()[configFile]).toMatchSnapshot();
 	expect(install).toBeCalledWith(['eslint', packageName]);
 });
 
 it('should throw when given a file path for the preset name', async () => {
-	const options = await getTaskOptions(task, false, {
-		eslintPreset: './path/to/config',
-	});
+	const options = await getTaskOptions(
+		task,
+		{ interactive: false },
+		{
+			eslintPreset: './path/to/config',
+		}
+	);
 	expect(() => task(options)).toThrow();
 });
 
@@ -77,7 +87,13 @@ it('should not add a custom preset if it’s already there', async () => {
 		[configFile]: stringify({ extends: 'airbnb' }),
 	});
 
-	task(await getTaskOptions(task, false, { eslintPreset: 'airbnb' }));
+	task(
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ eslintPreset: 'airbnb' }
+		)
+	);
 
 	expect(vol.toJSON()[configFile]).toMatchSnapshot();
 	expect(install).toBeCalledWith(['eslint', 'eslint-config-airbnb']);
@@ -89,7 +105,13 @@ it('should add a custom preset (array)', async () => {
 		[configFile]: stringify({ extends: ['coffee', 'pizza'] }),
 	});
 
-	task(await getTaskOptions(task, false, { eslintPreset: 'airbnb' }));
+	task(
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ eslintPreset: 'airbnb' }
+		)
+	);
 
 	expect(vol.toJSON()[configFile]).toMatchSnapshot();
 	expect(install).toBeCalledWith(['eslint', 'eslint-config-airbnb']);
@@ -101,7 +123,13 @@ it('should not add a custom preset if it’s already there (array)', async () =>
 		[configFile]: stringify({ extends: ['airbnb', 'pizza'] }),
 	});
 
-	task(await getTaskOptions(task, false, { eslintPreset: 'airbnb' }));
+	task(
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ eslintPreset: 'airbnb' }
+		)
+	);
 
 	expect(vol.toJSON()[configFile]).toMatchSnapshot();
 	expect(install).toBeCalledWith(['eslint', 'eslint-config-airbnb']);
@@ -112,7 +140,13 @@ it('should add custom rules', async () => {
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, { eslintRules: { 'no-undef': 0 } }));
+	task(
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{ eslintRules: { 'no-undef': 0 } }
+		)
+	);
 
 	expect(vol.toJSON()[configFile]).toMatchSnapshot();
 });
@@ -123,9 +157,13 @@ it('should install extra dependencies', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			eslintPeerDependencies: ['eslint-plugin-react'],
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				eslintPeerDependencies: ['eslint-plugin-react'],
+			}
+		)
 	);
 
 	expect(install).toBeCalledWith(['eslint', 'eslint-plugin-react']);
@@ -142,9 +180,13 @@ it('should remove obsolete dependencies', async () => {
 	});
 
 	task(
-		await getTaskOptions(task, false, {
-			eslintObsoleteDependencies: ['prettier'],
-		})
+		await getTaskOptions(
+			task,
+			{ interactive: false },
+			{
+				eslintObsoleteDependencies: ['prettier'],
+			}
+		)
 	);
 
 	expect(uninstall).toBeCalledWith(['jslint', 'jshint', 'prettier']);
@@ -161,7 +203,7 @@ it('should keep custom extensions defined in a package.json script', async () =>
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
 });
@@ -177,7 +219,7 @@ it('should not add custom extensions when they were not specified', async () => 
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
 });
@@ -192,7 +234,7 @@ it('should replace scripts.test.eslint with scripts.lint and scripts.pretest', a
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
 });
@@ -208,7 +250,7 @@ it('should remove custom extension if it’s "js" (default value)', async () => 
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()['/package.json']).toMatchSnapshot();
 });
@@ -223,7 +265,7 @@ it('should add extra plugin, parser and extensions for a TypeScript project', as
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 	expect(install).toBeCalledWith([
@@ -246,7 +288,7 @@ it('should turn on JSX support in TypeScript parser if TypeScript and React are 
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });
@@ -262,7 +304,7 @@ it('should turn off TypeScript-specific eslint rules that conflict with Prettier
 		}),
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });

@@ -12,7 +12,7 @@ afterEach(() => vol.reset());
 it('should add .gitignore', async () => {
 	vol.fromJSON();
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });
@@ -22,7 +22,7 @@ it('should add package-lock.json, if yarn.lock exists', async () => {
 		'/yarn.lock': '',
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });
@@ -32,7 +32,7 @@ it('should add yarn.lock, if package-lock.json exists', async () => {
 		'/package-lock.json': '',
 	});
 
-	task(await getTaskOptions(task, false, {}));
+	task(await getTaskOptions(task, { interactive: false }, {}));
 
 	expect(vol.toJSON()).toMatchSnapshot();
 });

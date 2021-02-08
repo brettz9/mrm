@@ -204,19 +204,21 @@ async function getTaskOptions(
 				typeof options[name] !== 'undefined'
 					? options[name]
 					: typeof param.default === 'function'
-					? await param.default(options)
+					? await param.default(options, task.parameters, name)
 					: param.default,
 		}))
 	);
 
 	// Split interactive and static options
-	const [prompts, statics] = partition(
-		allOptions,
-		option =>
+	const [prompts, statics] = partition(allOptions, option => {
+		console.log('option', option.default);
+		return (
 			interactive &&
 			option.type !== 'config' &&
-			(!force || !('default' in option))
-	);
+			(!force || typeof option.default === 'undefined')
+		);
+	});
+	console.log('prompts, statics', force, prompts, statics);
 
 	// Validate static options
 	const invalid = statics.filter(param =>

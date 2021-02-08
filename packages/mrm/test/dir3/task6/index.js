@@ -13,13 +13,15 @@ module.exports.parameters = {
 	'third-config': {
 		type: 'input',
 		message: 'Please, fulfil this third interactive input',
-		default: jest.fn(
-			values =>
-				values['second-config'] &&
-				values['second-config']
+		default: jest.fn((values, params) => {
+			const cfg = values['second-config'] || params['second-config'].default;
+			return (
+				cfg &&
+				cfg
 					.split('')
 					.reverse()
 					.join('')
-		),
+			);
+		}),
 	},
 };

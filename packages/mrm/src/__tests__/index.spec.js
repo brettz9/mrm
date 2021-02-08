@@ -357,22 +357,19 @@ describe('getTaskOptions', () => {
 		it('should prompt values', async () => {
 			configureInquirer({
 				'first-config': 'first value',
-				'second-config': 'second value',
-				// 'third-config': keep default
+				// 'second-config': forced,
+				// 'third-config': forced
 			});
 
-			const answers = await getTaskOptions(
-				task6,
-				{ interactive: true, force: true },
-				{
-					'second-config': 'second value',
-				}
-			);
+			const answers = await getTaskOptions(task6, {
+				interactive: true,
+				force: true,
+			});
 
 			expect(answers).toEqual({
 				'first-config': 'first value',
-				'second-config': 'second value',
-				'third-config': 'eulav dnoces',
+				'second-config': 'default value',
+				'third-config': 'eulav tluafed',
 			});
 		});
 

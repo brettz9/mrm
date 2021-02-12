@@ -41,9 +41,10 @@ module.exports = function task({
 	eslintPreset,
 	eslintPeerDependencies,
 	eslintObsoleteDependencies,
-	eslintRules,
+	eslintConfig: _eslintConfig,
 }) {
 	let exts = '';
+	const { extends: extnds, ...eslintConfig } = _eslintConfig || {};
 	const legacyConfigFile = '.eslintrc';
 	const configFile = '.eslintrc.json';
 	const ignores = ['node_modules/'];
@@ -70,17 +71,23 @@ module.exports = function task({
 	const hasCustomPreset = _.castArray(eslintrc.get('extends', [])).find(x =>
 		x.startsWith(eslintPreset)
 	);
+	const presets = eslintrc.get('extends');
 	if (!hasCustomPreset) {
-		const presets = eslintrc.get('extends');
 		if (!presets) {
 			eslintrc.set('extends', eslintPreset);
 		} else {
 			eslintrc.set('extends', [eslintPreset, ..._.castArray(presets)]);
 		}
 	}
-	if (eslintRules) {
+	if (_eslintConfig) {
 		eslintrc.merge({
-			rules: eslintRules,
+			rules: {},
+			...eslintConfig,
+		});
+	}
+	if (extnds) {
+		eslintrc.merge({
+			extends: [...new Set(...presets, _.castArray(extnds))],
 		});
 	}
 
@@ -100,19 +107,44 @@ module.exports = function task({
 		const parser = '@typescript-eslint/parser';
 		const plugin = '@typescript-eslint/eslint-plugin';
 		packages.push(parser, plugin);
+		const {
+			// eslint-disable-next-line no-unused-vars
+			parser: _parser,
+			plugins,
+			parserOptions,
+			rules = {},
+			...otherConfig
+		} = eslintConfig;
+
+		let ecmaFeatures;
+		let otherParserOptions;
+		if (parserOptions) {
+			// eslint-disable-next-line no-unused-vars
+			let _project;
+			({
+				// eslint-disable-next-line no-unused-vars
+				project: _project,
+				ecmaFeatures,
+				...otherParserOptions
+			} = parserOptions);
+		}
+
 		eslintrc.merge({
 			parser,
-			plugins: [plugin],
+			plugins: [...new Set([plugin, ...(plugins || [])])],
 			parserOptions: {
 				// If using React, turn on JSX support in the TypeScript parser.
 				...(pkg.get('dependencies.react') && {
 					ecmaFeatures: {
+						...ecmaFeatures,
 						jsx: true,
 					},
 				}),
 				project: './tsconfig.json',
+				...otherParserOptions,
 			},
-			rules: eslintRules || {},
+			rules,
+			...otherConfig,
 		});
 		exts = ' --ext .ts,.tsx';
 
@@ -184,7 +216,7 @@ module.exports.parameters = {
 		type: 'config',
 		default: [],
 	},
-	eslintRules: {
+	eslintConfig: {
 		type: 'config',
 	},
 };

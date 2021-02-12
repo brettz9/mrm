@@ -112,7 +112,13 @@ it('should add custom rules', async () => {
 		'/package.json': packageJson,
 	});
 
-	task(await getTaskOptions(task, false, { eslintRules: { 'no-undef': 0 } }));
+	task(
+		await getTaskOptions(task, false, {
+			eslintConfig: {
+				rules: { 'no-undef': 0 },
+			},
+		})
+	);
 
 	expect(vol.toJSON()[configFile]).toMatchSnapshot();
 });

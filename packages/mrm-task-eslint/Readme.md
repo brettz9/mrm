@@ -35,9 +35,9 @@ Additional dependencies to install (e.g. `['prettier', 'eslint-plugin-prettier']
 
 Dependencies that should be removed (e.g. `['eslint-plugin-prettier']`).
 
-### `eslintRules` (optional)
+### `eslintConfig` (optional)
 
-Additional rules (e.g. `{ 'no-undef': 0 }`).
+Additional rules or other ESLint config to be merged at the top level (e.g., `{ rules: {'no-undef': 0 }}`). Besides `rules`, properties include: `env`, `globals`, `noInlineConfig`, `parser`, `parserOptions`, `plugins`, `root`, `ignorePatterns`, `settings`, and `overrides`.
 
 ## Changelog
 
